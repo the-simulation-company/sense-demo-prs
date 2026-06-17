@@ -1,0 +1,3 @@
+# Onboarding Playbook drives SCIM sync directly when target user is missing
+
+New joiners at Spring Health and Synthesia were sitting without Okta access for 2-4 hours of their first day because the HRIS-to-Okta SCIM sync runs on a 4-hour cadence and the onboarding Playbook fires on the HRIS start-date event before SCIM has propagated the user record. Playbook now detects the missing target user in Okta, calls the SCIM on-demand sync endpoint, waits with bounded retry, and only then proceeds with Okta group assignment. Optional `warm-up` Playbook in the library pre-syncs SCIM the day before a scheduled hire (CSL-2734).
