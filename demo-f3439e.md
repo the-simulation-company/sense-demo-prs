@@ -1,0 +1,3 @@
+# Bind Console Assistant Workday queries to per-customer schema
+
+Podium and Databricks both reported that Console Assistant was confidently citing Workday field names that don't exist in their tenants (`promotion_count`, `dept_termination_rate`). Assistant was generating queries against a stale internal field index instead of the customer's actual Workday schema. This binds Assistant's Workday queries to a per-customer schema introspected live from Reports-as-a-Service at query time, and when the model wants a field that doesn't exist, refuses to answer and surfaces the top-3 closest real fields. Past hallucinated answers are recoverable via the query-history audit log (CSL-2588).
