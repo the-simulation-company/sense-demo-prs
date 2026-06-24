@@ -1,0 +1,3 @@
+# Collapse step-up MFA + grant into single worker for M365
+
+Bloomerang and Calendly hit a stale-MFA loop on M365 admin grants: step-up MFA completed, then the actual grant call landed 30-60s later because step-up and grant were on separate workers with a queue between them. Microsoft's M365 API enforces a 60-second MFA freshness window, so the grant failed every time. This collapses step-up and grant into a single worker for M365 (and any IdP that enforces MFA freshness via a generic capability flag), with a silent freshness re-check before the grant call as a belt-and-suspenders for any queue gap that survives the consolidation (CSL-2371).
