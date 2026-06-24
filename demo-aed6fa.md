@@ -1,0 +1,3 @@
+# Replace access policy picker with inferred-match confirmation card
+
+Engineers are picking the wrong access policy from the Slack request modal — Scale AI's engineers picked the BI-tool policy when they wanted Snowflake read; Ramp's engineers picked the GitHub-org policy when they wanted single-repo access. Both said engineers don't read policy descriptions in Slack. This replaces the picker with an NL-inferred match: engineer describes what they want, Inbox runs the policy library through the same classifier the auto-router uses, picks the highest-confidence match, and shows a confirmation card. Low-confidence matches (<0.7) still fall back to the picker. Behind a per-org feature flag (CSL-2845).
