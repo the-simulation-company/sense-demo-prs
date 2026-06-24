@@ -1,0 +1,3 @@
+# Add repository handler to time-bound access revoke worker
+
+Scale AI's identity team caught that time-bound GitHub repo access grants weren't auto-revoking at expiry — two engineers kept repo write access for 3 weeks after the timer fired. Root cause: the revoke worker's handler map covered `team`, `okta_group`, `aws_role`, `salesforce_profile` but not `repository`, and the default handler was a no-op rather than an error so failures never surfaced. Adds the `repository` handler (revokes per-repo collaborator entry), flips the default handler from no-op to hard error, and backfills Scale AI's 7 expired-but-active grants in a one-time batch (CSL-2698).
